@@ -10,18 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  uid String @id @default(cuid())
-  email String @db.VarChar(255)
-  username String @unique @db.VarChar(255) 
-  password String @db.VarChar(255)
-  role String @db.VarChar(255)
-  refferalNum String @unique
-  useReffReg Boolean @default(false)
-  pointsBalance Int 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
+model User {
+  uid           String         @id @default(cuid())
+  email         String         @db.VarChar(255)
+  username      String         @unique @db.VarChar(255)
+  password      String         @db.VarChar(255)
+  role          Role           @relation(fields: [roleId], references: [id])
+  roleId        Int
+  refferalNum   String         @unique
+  useReffReg    Boolean        @default(false)
+  pointsBalance Int
+  event         Event[]
+  reviewRating  ReviewRating[]
+  promotion     Promotion[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
 }
 
 enum EventType {
@@ -34,78 +38,100 @@ enum RoleUser {
   eventOrganizer
 }
 
-model Event{
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  image String @db.VarChar(255)
-  startDate DateTime @db.Date
-  endDate DateTime @db.Date
-  time DateTime @db.Time()
-  description String
-  event_type EventType @default(paid)
+model Event {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  image        String         @db.VarChar(255)
+  startDate    DateTime       @db.Date
+  endDate      DateTime       @db.Date
+  time         DateTime       @db.Time()
+  location     Location       @relation(fields: [locationId], references: [id])
+  locationId   Int            @unique
+  description  String
+  eventType    EventType      @default(paid)
+  category     Category       @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  user         User           @relation(fields: [userId], references: [uid])
+  userId       String
+  reviewRating ReviewRating[]
+  promotion    Promotion[]
+  ticket       Ticket[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  city      String   @db.VarChar(255)
+  address   String   @db.VarChar(255)
+  region    String   @db.VarChar(255)
+  event     Event?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id        Int       @id @default(autoincrement())
+  role      RoleUser
+  user      User[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
-model Location{
-  id Int @id @default(autoincrement())
-  city String @db.VarChar(255)
-  address String @db.VarChar(255)
-  region String @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Role{
-  id Int @id @default(autoincrement())
-  role RoleUser 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-}
-
-model ReviewRating{
-  id Int @id @default(autoincrement())
-  rating Int
-  review String @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model ReviewRating {
+  id        Int       @id @default(autoincrement())
+  rating    Int
+  review    String    @db.VarChar(255)
+  user      User      @relation(fields: [userId], references: [uid])
+  userId    String
+  event     Event     @relation(fields: [eventId], references: [id])
+  eventId   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
 enum CategoryEvent {
-  hiburan
-  musik
-  edukasi
+  Hiburan
+  Musik
+  Edukasi
 }
 
-model Category{
-  id Int @id @default(autoincrement())
-  name CategoryEvent 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Category {
+  id        Int           @id @default(autoincrement())
+  name      CategoryEvent
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  deletedAt DateTime?
+  event     Event[]
+}
+
+model Promotion {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  discount  Float
+  startDate DateTime  @db.Date
+  endDate   DateTime  @db.Date
+  event     Event     @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User      @relation(fields: [userId], references: [uid])
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
-model Promotion{
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  discount Float 
-  startDate DateTime @db.Date
-  endDate DateTime @db.Date
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-}
-
-model Ticket{
-  id Int @id @default(autoincrement())
-  ticketType String @db.VarChar(255)
-  price Int 
-  availableSeat Boolean @default(true)
-  qty Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
+model Ticket {
+  id            Int       @id @default(autoincrement())
+  ticketType    String    @db.VarChar(255)
+  price         Int
+  availableSeat Boolean   @default(true)
+  qty           Int
+  event         Event     @relation(fields: [eventId], references: [id])
+  eventId       Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
 }
