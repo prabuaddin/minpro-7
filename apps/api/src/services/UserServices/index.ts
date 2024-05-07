@@ -7,19 +7,19 @@ export const newUserAccount = async ({ email, username, password, roleId, inputR
     const referralCodes = await ReferralCodes({ username })
     return await prisma.$transaction(async (prisma) => {
         // // VALIDATOR
-        // const findDuplicateEmail = await prisma.user.findMany({
-        //     where: {
-        //         email: email
-        //     }
-        // })
-        // if (findDuplicateEmail.length) throw new Error('Email Already Registered!')
+        const findDuplicateEmail = await prisma.user.findMany({
+            where: {
+                email: email
+            }
+        })
+        if (findDuplicateEmail.length) throw new Error('Email Already Registered!')
 
-        // const findDuplicateUsername = await prisma.user.findMany({
-        //     where: {
-        //         username: username
-        //     }
-        // })
-        // if (findDuplicateUsername.length) throw new Error('Username Already Exist!')
+        const findDuplicateUsername = await prisma.user.findMany({
+            where: {
+                username: username
+            }
+        })
+        if (findDuplicateUsername.length) throw new Error('Username Already Refistered!')
 
         // // CREATE NEW USER
         const createUser = await prisma.user.create({
@@ -48,7 +48,7 @@ export const newUserAccount = async ({ email, username, password, roleId, inputR
                             uid: createUser.uid
                         }
                     },
-                    expiredDate: addMonths(new Date().toJSON(), 3)
+                    expiredDate: addMonths(new Date(), 3)
                 }
             })
 
@@ -63,8 +63,6 @@ export const newUserAccount = async ({ email, username, password, roleId, inputR
 
             // CREATE USER USED REFCODE POINT
             if (findUserUsedReferralCode) {
-                let currentDate = new Date().toJSON()
-
                 await prisma.points.create({
                     data: {
                         balance: 10000,
@@ -73,39 +71,39 @@ export const newUserAccount = async ({ email, username, password, roleId, inputR
                                 uid: findUserUsedReferralCode[0].uid
                             }
                         },
-                        expiredDate: addMonths(currentDate, 3)
+                        expiredDate: addMonths(new Date(), 3)
                     }
                 })
             }
 
-            // TOTAL POINTS USER USED REFCODE
-            let findPoints = await prisma.user.findUnique({
-                where: {
-                    uid: findUserUsedReferralCode[0].uid,
-                },
-                include: {
-                    points: {
-                        where: {
-                            expiredDate: {
-                                gte: new Date()
-                            }
-                        }
-                    }
-                },
+            // // TOTAL POINTS USER USED REFCODE
+            // let findPoints = await prisma.user.findUnique({
+            //     where: {
+            //         uid: findUserUsedReferralCode[0].uid,
+            //     },
+            //     include: {
+            //         points: {
+            //             where: {
+            //                 expiredDate: {
+            //                     gte: new Date()
+            //                 }
+            //             }
+            //         }
+            //     },
 
-            })
+            // })
 
-            let totalPoints = findPoints?.points.reduce((acc, curr) => acc + curr.balance, 0);
+            // let totalPoints = findPoints?.points.reduce((acc, curr) => acc + curr.balance, 0);
 
-            // UPDATE USER USED POINT BALANCE
-            await prisma.user.update({
-                where: {
-                    uid: findUserUsedReferralCode[0].uid
-                },
-                data: {
-                    pointsBalance: totalPoints
-                }
-            })
+            // // UPDATE USER USED POINT BALANCE
+            // await prisma.user.update({
+            //     where: {
+            //         uid: findUserUsedReferralCode[0].uid
+            //     },
+            //     data: {
+            //         pointsBalance: totalPoints
+            //     }
+            // })
         }
     })
 
