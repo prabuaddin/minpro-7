@@ -11,21 +11,23 @@ datasource db {
 }
 
 model User {
-  uid           String         @id @default(cuid())
-  email         String         @db.VarChar(255)
-  username      String         @unique @db.VarChar(255)
-  password      String         @db.VarChar(255)
-  role          Role           @relation(fields: [roleId], references: [id])
-  roleId        Int
-  refferalNum   String         @unique
-  useReffReg    Boolean        @default(false)
-  pointsBalance Int
-  event         Event[]
-  reviewRating  ReviewRating[]
-  promotion     Promotion[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  deletedAt     DateTime?
+  uid            String            @id @default(cuid())
+  email          String            @unique @db.VarChar(255)
+  username       String            @unique @db.VarChar(255)
+  password       String            @db.VarChar(255)
+  role           Role?             @relation(fields: [roleId], references: [id])
+  roleId         Int
+  referralNum    String?           @unique
+  pointsBalance  Int               @default(0)
+  inputRef       String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  deletedAt      DateTime?
+  event          Event[]
+  reviewRating   ReviewRating[]
+  promotion      Promotion[]
+  points         Points[]
+  discontVoucher DiscountVoucher[]
 }
 
 enum EventType {
@@ -134,4 +136,25 @@ model Ticket {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
+}
+
+model Points {
+  id          Int      @id @default(autoincrement())
+  balance     Int
+  user        User     @relation(fields: [userId], references: [uid])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiredDate DateTime @db.DateTime()
+}
+
+model DiscountVoucher {
+  id          Int      @id @default(autoincrement())
+  value       Float
+  user        User     @relation(fields: [userId], references: [uid])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiredDate DateTime @db.DateTime()
+  isUsed      Boolean  @default(false)
 }
