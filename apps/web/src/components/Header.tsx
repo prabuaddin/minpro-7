@@ -1,3 +1,4 @@
+
 'use client';
 import { usePathname } from 'next/navigation';
 import SearchInput from "./Search";
@@ -18,22 +19,32 @@ export const Header = () => {
     >
       <div className="navbar bg-blue-900">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl text-white"><IoTicket size={20}/> GetTicket.Id</a>
+          <a className="btn btn-ghost text-xl text-white">
+            <IoTicket size={20} /> GetTicket.Id
+          </a>
         </div>
         <div className="flex-none">
-          <SearchInput/>
+          <SearchInput />
           <ul className="menu menu-horizontal px-1 text-white">
             <li>
-              <a><FaCalendarPlus/> Buat Event</a>
+              <a>
+                <FaCalendarPlus /> Buat Event
+              </a>
             </li>
             <li>
-              <a><FaRegCompass/> Cari Event</a>
+              <a>
+                <FaRegCompass /> Cari Event
+              </a>
             </li>
             <li>
-              <button className='bg-slate-900 border border-white hover:bg-slate-500'>Daftar</button>
+              <button className="bg-slate-900 border border-white hover:bg-slate-500">
+                Daftar
+              </button>
             </li>
             <li>
-              <button className='bg-blue-400 ml-3 hover:bg-blue-700'>Masuk</button>
+              <button className="bg-blue-400 ml-3 hover:bg-blue-700">
+                Masuk
+              </button>
             </li>
           </ul>
         </div>
