@@ -11,23 +11,24 @@ datasource db {
 }
 
 model User {
-  uid            String            @id @default(cuid())
-  email          String            @unique @db.VarChar(255)
-  username       String            @unique @db.VarChar(255)
-  password       String            @db.VarChar(255)
-  role           Role?             @relation(fields: [roleId], references: [id])
-  roleId         Int
-  referralNum    String?           @unique
-  pointsBalance  Int               @default(0)
-  inputRef       String?
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  deletedAt      DateTime?
-  event          Event[]
-  reviewRating   ReviewRating[]
-  promotion      Promotion[]
+  uid           String         @id @default(cuid())
+  email         String         @db.VarChar(255)
+  username      String         @unique @db.VarChar(255)
+  password      String         @db.VarChar(255)
+  role          Role           @relation(fields: [roleId], references: [id])
+  roleId        Int
+  refferalNum   String         @unique
+  useReffReg    Boolean        @default(false)
+  pointsBalance Int
+  event         Event[]
+  reviewRating  ReviewRating[]
+  promotion     Promotion[]
+  transaction   Transaction[]
   points         Points[]
   discontVoucher DiscountVoucher[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
 }
 
 enum EventType {
@@ -58,6 +59,7 @@ model Event {
   reviewRating ReviewRating[]
   promotion    Promotion[]
   ticket       Ticket[]
+  transaction  Transaction[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   deletedAt    DateTime?
@@ -125,9 +127,32 @@ model Promotion {
   deletedAt DateTime?
 }
 
+model Transaction{
+  id Int @id @default(autoincrement())
+  event Event @relation(fields: [eventId], references: [id])
+  eventId Int
+  user User @relation(fields: [userId], references: [uid])
+  userId String
+  qty Int
+  totalPrice Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model TicketType{
+  id Int @id @default(autoincrement())
+  name String
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  ticketId Int @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+}
+
 model Ticket {
   id            Int       @id @default(autoincrement())
-  ticketType    String    @db.VarChar(255)
+  ticketType    TicketType? 
   price         Int
   availableSeat Boolean   @default(true)
   qty           Int

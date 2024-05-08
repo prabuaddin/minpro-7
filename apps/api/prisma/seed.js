@@ -28,6 +28,12 @@ async function main() {
       data: item,
     });
   }
+
+  for(let item of dataCategoryEvent){
+    await prisma.category.create({
+      data: item
+    })
+  }
 }
 
 main()
