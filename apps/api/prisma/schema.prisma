@@ -15,7 +15,7 @@ model User {
   email          String            @unique @db.VarChar(255)
   username       String            @unique @db.VarChar(255)
   password       String            @db.VarChar(255)
-  role           Role              @relation(fields: [roleId], references: [id])
+  role           Role?             @relation(fields: [roleId], references: [id])
   roleId         Int
   referralNum    String?           @unique
   pointsBalance  Int               @default(0)
