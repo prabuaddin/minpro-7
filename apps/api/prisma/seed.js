@@ -23,8 +23,8 @@ const dataUserRole = [
 ];
 
 async function main() {
-  for (let item of dataUserRole) {
-    await prisma.role.create({
+  for (let item of dataCategoryEvent) {
+    await prisma.category.create({
       data: item,
     });
   }

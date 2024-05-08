@@ -24,6 +24,8 @@ model User {
   reviewRating  ReviewRating[]
   promotion     Promotion[]
   transaction   Transaction[]
+  points         Points[]
+  discontVoucher DiscountVoucher[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
@@ -159,4 +161,25 @@ model Ticket {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
+}
+
+model Points {
+  id          Int      @id @default(autoincrement())
+  balance     Int
+  user        User     @relation(fields: [userId], references: [uid])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiredDate DateTime @db.DateTime()
+}
+
+model DiscountVoucher {
+  id          Int      @id @default(autoincrement())
+  value       Float
+  user        User     @relation(fields: [userId], references: [uid])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiredDate DateTime @db.DateTime()
+  isUsed      Boolean  @default(false)
 }

@@ -38,7 +38,7 @@
     "@types/react-slick": "^0.23.13",
     "autoprefixer": "^10.4.19",
     "cypress": "^13.6.2",
-    "daisyui": "^4.10.2",
+    "daisyui": "^4.10.5",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "postcss": "^8.4.38",

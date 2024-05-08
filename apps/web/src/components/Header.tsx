@@ -1,11 +1,21 @@
+'use client';
+import { usePathname } from 'next/navigation';
 import SearchInput from "./Search";
 import { FaCalendarPlus } from "react-icons/fa";
 import { FaRegCompass } from "react-icons/fa6";
 import { IoTicket } from "react-icons/io5";
 
 export const Header = () => {
+  const pathname = usePathname();
+
   return (
-    <>
+    <div
+      className={`${
+        pathname == '/participants/register' || '/event-organizer/register'
+          ? 'hidden'
+          : 'block'
+      }`}
+    >
       <div className="navbar bg-blue-900">
         <div className="flex-1">
           <a className="btn btn-ghost text-xl text-white"><IoTicket size={20}/> GetTicket.Id</a>
@@ -28,6 +38,6 @@ export const Header = () => {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
