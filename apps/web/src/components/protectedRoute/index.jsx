@@ -17,14 +17,15 @@ const ProtectedRoute = ({ children }) => {
     '/participants/register',
   ];
 
-  const protectProfilePage = [
+  const protectNotLoginPage = [
     '/event-organizer/profile',
     '/participants/profile',
+    '/buatevent',
   ];
 
   if (stateUser.username && protectLoginPage.includes(pathname)) {
     router.push('/');
-  } else if (!stateUser.username && protectProfilePage.includes(pathname)) {
+  } else if (!stateUser.username && protectNotLoginPage.includes(pathname)) {
     router.push('/');
   } else if (stateUser.roleId == 1 && pathname == '/event-organizer/profile') {
     router.push('/participants/profile');

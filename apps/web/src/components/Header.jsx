@@ -1,7 +1,7 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import { IoHome } from 'react-icons/io5';
-import SearchInput from './Search';
+// import SearchInput from './Search';
 import { FaCalendarPlus } from 'react-icons/fa';
 import { FaRegCompass } from 'react-icons/fa6';
 import { IoTicket } from 'react-icons/io5';

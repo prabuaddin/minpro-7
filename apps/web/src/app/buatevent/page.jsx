@@ -9,50 +9,13 @@ import axios from 'axios';
 import { useCreateEvent } from '../../hooks/CreateEvent/useCreateEvent';
 
 export default function CreateEvent() {
-  // const [name, setName] = useState('')
-  // const [eventOrganizer, setEventOrganizer] = useState('')
   const [images, setImages] = useState([]);
   const { mutationCreateEvent } = useCreateEvent();
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
-  // const [startTime, setStartTime] = useState('')
-  // const [endTime, setEndTime] = useState('')
-  // const [city, setCity] = useState('')
-  // const [address, setAddress] = useState('')
-  // const [description, setDescription] = useState('')
-  // const [categoryId, setCategoryId] = useState(0)
-  // const [availableSeat, setAvailableSeat] = useState(0);
-  // const [price, setPrice] = useState(0)
 
-  // const increment = () => {
-  //   setAvailableSeat(availableSeat + 1);
-  // };
-
-  // const decrement = () => {
-  //   if (availableSeat > 0) {
-  //     setAvailableSeat(availableSeat - 1);
-  //   }
-  // };
-
-  // const handleStartDate = (date) => {
-  //   setStartDate(date);
-  // };
-
-  // const handleEndDate = (date) => {
-  //   setEndDate(date);
-  // };
-
-  const handleEvent = async (values) => {
-    try {
-      // const findEvent = await axios.get(`http://localhost:8000/event-organizer/events/name=${values.name}`)
-      // if(findEvent.data.length > 0) throw new Error('Event still available')
-
-      await axios.post('http://localhost:8000/event-organizer/event', values);
-      toast.success('Create Event Success');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const getData = localStorage.getItem('persist:main-root');
+  const Data = JSON.parse(getData);
+  const user = Data.user;
+  const userData = JSON.parse(user);
 
   const onSetFiles = (event) => {
     try {
@@ -93,7 +56,7 @@ export default function CreateEvent() {
           <Formik
             initialValues={{
               name: '',
-              eventOrganizer: '',
+              eventOrganizer: userData?.username,
               startDate: '',
               endDate: '',
               startTime: '',
@@ -107,7 +70,7 @@ export default function CreateEvent() {
               categoryId: 0,
             }}
             onSubmit={(values, availableSeat) => {
-              console.log(values)
+              console.log(values);
               const fd = new FormData();
               fd.append(
                 'data',
@@ -134,7 +97,6 @@ export default function CreateEvent() {
               console.log(values);
               mutationCreateEvent(fd);
               // handleEvent(fd)
-              
             }}
           >
             {({ dirty, isValid }) => {
@@ -163,6 +125,7 @@ export default function CreateEvent() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="Event Organizer"
                         required
+                        disabled={true}
                       />
                     </div>
                     <div className="w-full">
@@ -175,6 +138,7 @@ export default function CreateEvent() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         required
                       >
+                        <option value="0">Pilih Kategori</option>
                         <option value="1">Hiburan</option>
                         <option value="2">Musik</option>
                         <option value="3">Edukasi</option>
