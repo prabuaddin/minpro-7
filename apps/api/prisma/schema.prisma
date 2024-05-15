@@ -11,24 +11,24 @@ datasource db {
 }
 
 model User {
-  uid           String         @id @default(cuid())
-  email         String         @db.VarChar(255)
-  username      String         @unique @db.VarChar(255)
-  password      String         @db.VarChar(255)
-  role          Role           @relation(fields: [roleId], references: [id])
-  roleId        Int
-  refferalNum   String         @unique
-  useReffReg    Boolean        @default(false)
-  pointsBalance Int
-  event         Event[]
-  reviewRating  ReviewRating[]
-  promotion     Promotion[]
-  transaction   Transaction[]
+  uid            String            @id @default(cuid())
+  email          String            @db.VarChar(255)
+  username       String            @unique @db.VarChar(255)
+  password       String            @db.VarChar(255)
+  role           Role              @relation(fields: [roleId], references: [id])
+  roleId         Int
+  inputRef       String?
+  referralNum    String            @unique
+  pointsBalance  Int               @default(0)
+  event          Event[]
+  reviewRating   ReviewRating[]
+  promotion      Promotion[]
+  transaction    Transaction[]
   points         Points[]
   discontVoucher DiscountVoucher[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  deletedAt     DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  deletedAt      DateTime?
 }
 
 enum EventType {
@@ -42,39 +42,39 @@ enum RoleUser {
 }
 
 model Event {
-  id           Int            @id @default(autoincrement())
-  name         String         @db.VarChar(255)
+  id             Int            @id @default(autoincrement())
+  name           String         @db.VarChar(255)
   eventOrganizer String
-  startDate    DateTime       @db.Date
-  endDate      DateTime       @db.Date
-  startTime    DateTime       @db.Time()
-  endTime      DateTime       @db.Time()
-  city         String
-  address      String
-  description  String
-  availableSeat Int
-  price         Int
-  eventType    EventType      @default(paid)
-  category     Category @relation(fields: [categoryId], references: [id])
-  categoryId   Int
-  image        Image[]
-  user         User[]
-  reviewRating ReviewRating[]
-  promotion    Promotion[]
-  transaction  Transaction[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  deletedAt    DateTime?
+  startDate      DateTime       @db.Date
+  endDate        DateTime       @db.Date
+  startTime      DateTime       @db.Time()
+  endTime        DateTime       @db.Time()
+  city           String
+  address        String
+  description    String
+  availableSeat  Int
+  price          Int
+  eventType      EventType      @default(paid)
+  category       Category       @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  image          Image[]
+  user           User[]
+  reviewRating   ReviewRating[]
+  promotion      Promotion[]
+  transaction    Transaction[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
 }
 
-model Image{
-  id Int @id @default(autoincrement())
-  url String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  deletedAt    DateTime?
-  event   Event @relation(fields: [eventId], references: [id])
-  eventId Int
+model Image {
+  id        Int       @id @default(autoincrement())
+  url       String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  event     Event     @relation(fields: [eventId], references: [id])
+  eventId   Int
 }
 
 model Role {
@@ -129,37 +129,37 @@ model Promotion {
   deletedAt DateTime?
 }
 
-model Transaction{
-  id Int @id @default(autoincrement())
-  event Event @relation(fields: [eventId], references: [id])
-  eventId Int
-  user User @relation(fields: [userId], references: [uid])
-  userId String
-  qty Int
+model Transaction {
+  id         Int       @id @default(autoincrement())
+  event      Event     @relation(fields: [eventId], references: [id])
+  eventId    Int
+  user       User      @relation(fields: [userId], references: [uid])
+  userId     String
+  qty        Int
   totalPrice Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+}
+
+model TicketType {
+  id        Int       @id @default(autoincrement())
+  name      String
+  ticket    Ticket    @relation(fields: [ticketId], references: [id])
+  ticketId  Int       @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
-model TicketType{
-  id Int @id @default(autoincrement())
-  name String
-  ticket Ticket @relation(fields: [ticketId], references: [id])
-  ticketId Int @unique
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
-}
-
 model Ticket {
-  id            Int       @id @default(autoincrement())
-  ticketType    TicketType? 
+  id            Int         @id @default(autoincrement())
+  ticketType    TicketType?
   price         Int
-  availableSeat Boolean   @default(true)
+  availableSeat Boolean     @default(true)
   qty           Int
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   deletedAt     DateTime?
 }
 
@@ -171,6 +171,7 @@ model Points {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   expiredDate DateTime @db.DateTime()
+  isUsed      Boolean  @default(false)
 }
 
 model DiscountVoucher {

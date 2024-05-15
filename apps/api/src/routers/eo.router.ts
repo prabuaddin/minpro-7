@@ -12,4 +12,5 @@ router.post('/event', uploader, createAddEvent)
 router.get('/events', getEvent )
 
 
+
 export default router

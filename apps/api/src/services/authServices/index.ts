@@ -12,14 +12,15 @@ export const findLoginUserEo = async ({ email }: IFindEmployeeByEmailParams) => 
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
                 }
             },
             points: {
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
+                    isUsed: false
                 }
             }
         }
@@ -41,14 +42,16 @@ export const findLoginUserEo = async ({ email }: IFindEmployeeByEmailParams) => 
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
+                    isUsed: false
                 }
             },
             points: {
                 where: {
                     expiredDate: {
-                        gte: new Date()
-                    }
+                        gte: new Date(),
+                    },
+                    isUsed: false
                 }
             }
         }
@@ -75,7 +78,8 @@ export const findLoginUserParticipants = async ({ email }: IFindEmployeeByEmailP
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
+                    isUsed: false
                 }
             }
         }
@@ -97,18 +101,99 @@ export const findLoginUserParticipants = async ({ email }: IFindEmployeeByEmailP
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
+                    isUsed: false
                 }
             },
             points: {
                 where: {
                     expiredDate: {
                         gte: new Date()
-                    }
+                    },
+                    isUsed: false
                 }
             }
         }
 
     })
 
+}
+
+export const findUserById = async ({ uid }: { uid: any }) => {
+    return await prisma.user.findUnique({
+        where: {
+            uid: uid
+        },
+        include: {
+            role: true
+        }
+    })
+}
+
+export const updateAccount = async ({ uid, email, username }: any) => {
+    return await prisma.$transaction(async (prisma) => {
+        const findDuplicateEmail = await prisma.user.findMany({
+            where: {
+                NOT: {
+                    uid: uid
+                },
+                AND: {
+                    email: email
+                }
+            }
+        })
+        if (findDuplicateEmail.length) throw new Error('Email Already Registered!')
+
+        const findDuplicateUsername = await prisma.user.findMany({
+            where: {
+                NOT: {
+                    uid: uid
+                },
+                AND: {
+                    username: username
+                }
+            }
+        })
+        if (findDuplicateUsername.length) throw new Error('Username Already Registered!')
+
+        const findUserToUpdate = await prisma.user.findUnique({
+            where: {
+                uid: uid
+            }
+        })
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                uid: findUserToUpdate?.uid
+            },
+            data: {
+                email: email,
+                username: username
+            }
+        })
+
+        return await prisma.user.findUnique({
+            where: {
+                uid: uid
+            },
+            include: {
+                discontVoucher: {
+                    where: {
+                        expiredDate: {
+                            gte: new Date()
+                        },
+                        isUsed: false
+                    }
+                },
+                points: {
+                    where: {
+                        expiredDate: {
+                            gte: new Date()
+                        },
+                        isUsed: false
+                    }
+                }
+            }
+        })
+    })
 }

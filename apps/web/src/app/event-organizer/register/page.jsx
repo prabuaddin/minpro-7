@@ -2,13 +2,12 @@
 import Image from 'next/image';
 import { Formik, Form, Field } from 'formik';
 import { useRegisterEoUser } from '../../../hooks/RegisterUser/useRegisterEoUser';
-import { RegisterHeader } from '@/components/RegisterHeader';
+import Link from 'next/link';
 
 export default function registerEoUserPage() {
   const { mutationRegisterEoUser } = useRegisterEoUser();
   return (
     <>
-      <RegisterHeader />
       <div className="bg-black h-80 relative">
         <Image
           src="/Register/1000_F_310942037_aekjJ5SNvOixyf1zP8U0NsLq6f0Tbex1.jpeg"
@@ -24,7 +23,7 @@ export default function registerEoUserPage() {
           </span>
           <div className="flex gap-2 text-md font-extrabold text-white text-center">
             <span className="z-0 hover:text-blue-500 transition duration-300 cursor-pointer">
-              Beranda
+              <Link href={'/'}>Beranda</Link>
             </span>
             <span className="z-0">/ Organizer Signup</span>
           </div>
@@ -47,16 +46,18 @@ export default function registerEoUserPage() {
         {({ dirty }) => {
           return (
             <Form>
-              <div className="sm:w-full sm:flex sm:flex-col sm:justify-center sm:items-center md:gap-5 sm:py-20">
+              <div className="sm:w-full sm:flex sm:flex-col gap-2 sm:justify-center sm:items-center md:gap-5 sm:py-20">
                 <div className="flex flex-col text-center gap-2">
                   <span className="text-xl font-bold">
                     Ramaikan GetTicket.Id Dengan Event Mu!
                   </span>
                   <div className=" text-sm">
                     <span>Sudah punya akun?</span>
-                    <span className=" pl-1  font-semibold text-blue-900">
-                      Masuk
-                    </span>
+                    <Link href={'/event-organizer/login'}>
+                      <span className=" pl-1  font-semibold text-blue-900">
+                        Masuk
+                      </span>
+                    </Link>
                   </div>
                 </div>
                 <span className="sm:w-2/4 md:flex md:gap-6">

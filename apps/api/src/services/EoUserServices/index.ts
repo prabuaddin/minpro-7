@@ -5,8 +5,7 @@ import { ICreateEvent } from "./types";
 
 export const newEoAccount = async ({ email, password, username, inputRef }: IUser) => {
     const referralCodes = await ReferralCodes({ username })
-    return await prisma.$transaction(async (prisma: any) => {
-        // // VALIDATOR
+    return await prisma.$transaction(async (prisma) => {
         const findDuplicateEmail = await prisma.user.findMany({
             where: {
                 email: email
@@ -21,7 +20,7 @@ export const newEoAccount = async ({ email, password, username, inputRef }: IUse
         })
         if (findDuplicateUsername.length) throw new Error('Username Already Registered!')
 
-        // CREATE NEW USER
+
         await prisma.user.create({
             data: {
                 email: email,
@@ -49,8 +48,8 @@ export const newEoAccount = async ({ email, password, username, inputRef }: IUse
 //     })
 // }
 
-export const createEvent = async(data: any, images: any) => {
-    return await prisma.$transaction(async(tx) => {
+export const createEvent = async (data: any, images: any) => {
+    return await prisma.$transaction(async (tx) => {
         const createdEvent = await tx.event.create({
             data: {
                 name: data.name,
@@ -83,6 +82,6 @@ export const createEvent = async(data: any, images: any) => {
     })
 }
 
-export const findEvent = async() => {
+export const findEvent = async () => {
     return await prisma.event.findMany()
 }
