@@ -44,35 +44,37 @@ enum RoleUser {
 model Event {
   id           Int            @id @default(autoincrement())
   name         String         @db.VarChar(255)
-  image        String         @db.VarChar(255)
+  eventOrganizer String
   startDate    DateTime       @db.Date
   endDate      DateTime       @db.Date
-  time         DateTime       @db.Time()
-  location     Location       @relation(fields: [locationId], references: [id])
-  locationId   Int            @unique
+  startTime    DateTime       @db.Time()
+  endTime      DateTime       @db.Time()
+  city         String
+  address      String
   description  String
+  availableSeat Int
+  price         Int
   eventType    EventType      @default(paid)
-  category     Category       @relation(fields: [categoryId], references: [id])
+  category     Category @relation(fields: [categoryId], references: [id])
   categoryId   Int
-  user         User           @relation(fields: [userId], references: [uid])
-  userId       String
+  image        Image[]
+  user         User[]
   reviewRating ReviewRating[]
   promotion    Promotion[]
-  ticket       Ticket[]
   transaction  Transaction[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   deletedAt    DateTime?
 }
 
-model Location {
-  id        Int      @id @default(autoincrement())
-  city      String   @db.VarChar(255)
-  address   String   @db.VarChar(255)
-  region    String   @db.VarChar(255)
-  event     Event?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Image{
+  id Int @id @default(autoincrement())
+  url String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
 }
 
 model Role {
@@ -156,8 +158,6 @@ model Ticket {
   price         Int
   availableSeat Boolean   @default(true)
   qty           Int
-  event         Event     @relation(fields: [eventId], references: [id])
-  eventId       Int
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?

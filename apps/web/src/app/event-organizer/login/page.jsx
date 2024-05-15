@@ -21,7 +21,7 @@ export default function EoLoginPage() {
         }}
       >
         <Form>
-          <div className="flex flex-col justify-center items-center pt-28">
+          <div className="flex flex-col justify-center items-center p-10">
             <div>
               <Link className="btn btn-ghost text-2xl text-blue-900" href="/">
                 <IoTicket size={30} /> GetTicket.Id
