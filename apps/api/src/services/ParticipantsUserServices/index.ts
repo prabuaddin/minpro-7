@@ -5,7 +5,7 @@ import { addMonths } from "date-fns";
 
 export const newParticipantsAccount = async ({ email, username, password, inputRef }: IUser) => {
     const referralCodes = await ReferralCodes({ username })
-    return await prisma.$transaction(async (prisma) => {
+    return await prisma.$transaction(async (prisma: any) => {
         // // VALIDATOR
         const findDuplicateEmail = await prisma.user.findMany({
             where: {

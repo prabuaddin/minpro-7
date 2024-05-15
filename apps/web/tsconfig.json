@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Search.jsx", "src/components/cores/DatePicker.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Search.jsx", "src/components/cores/DatePicker.jsx", "src/app/page.jsx", "src/app/detailevent/page.jsx", "src/app/buatevent/page.jsx"],
   "exclude": ["node_modules"]
 }

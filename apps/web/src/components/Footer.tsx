@@ -1,8 +1,10 @@
 'use client'
+import { usePathname } from 'next/navigation';
 
 export const Footer = () => {
+
   return (
-    <>
+    <div>
       <footer className="footer p-10 bg-blue-900 text-neutral-content">
         <nav>
           <h6 className="text-white font-bold text-lg">Tentang GetTicket.Id</h6>
@@ -24,7 +26,7 @@ export const Footer = () => {
           <a className="link link-hover">Cookie policy</a>
         </nav>
       </footer>
-    </>
+    </div>
   );
 };
 

@@ -29,11 +29,11 @@ async function main() {
     });
   }
 
-  for(let item of dataCategoryEvent){
-    await prisma.category.create({
-      data: item
-    })
-  }
+  // for(let item of dataCategoryEvent){
+  //   await prisma.category.create({
+  //     data: item
+  //   })
+  // }
 }
 
 main()

@@ -1,4 +1,26 @@
+'use client'
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
 export default function DetailEvent() {
+
+  const params = useParams()
+  const [events, setEvents] = useState(null)  
+
+  const onFetchEvent = async() => {
+    try {
+      const res = await axios.get(`http://localhost:8000/event-organizer/events/${params?.id}`)
+      setEvents(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    onFetchEvent
+  })
+
   return (
     <>
       <section className="text-gray-700 body-font overflow-hidden bg-white">
@@ -26,7 +48,7 @@ export default function DetailEvent() {
                   >Ticket</div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content z-[1] p-2 w-full shadow bg-base-100 rounded-sm w-52"
+                    className="dropdown-content z-[1] p-2 w-full shadow bg-base-100 rounded-sm"
                   >
                     <li>Festival</li>
                     <li>VIP</li>
@@ -47,7 +69,7 @@ export default function DetailEvent() {
                   >
                     <div className="flex items-center gap-10 ">
                       <button className="btn border-black">-</button>
-
+                      
                       <button className="btn border-black">+</button>
                     </div>
                     <button className="btn bg-black text-white w-full rounded-none">
