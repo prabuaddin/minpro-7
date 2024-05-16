@@ -31,7 +31,10 @@ const ProtectedRoute = ({ children }) => {
     router.push('/participants/profile');
   } else if (stateUser.roleId == 2 && pathname == '/participants/profile') {
     router.push('/event-organizer/profile');
-  } else if (stateUser.roleId == 1 && pathname == '/buatevent') {
+  } else if (
+    (stateUser.roleId == 1 && pathname == '/buatevent') ||
+    (stateUser.roleId == 1 && pathname == '/event-organizer/my-events')
+  ) {
     router.push('/participants/profile');
   }
 
