@@ -19,6 +19,7 @@ const ProtectedRoute = ({ children }) => {
 
   const protectNotLoginPage = [
     '/event-organizer/profile',
+    '/event-organizer/my-events',
     '/participants/profile',
     '/buatevent',
   ];
