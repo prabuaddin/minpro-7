@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { findLoginUserEo, findLoginUserParticipants } from '@/services/authServices';
+import { findLoginUserEo, findLoginUserParticipants, updateAccount } from '@/services/authServices';
 import { createToken } from '@/helpers/Token';
 import { comparePassword } from '@/helpers/Hashing';
+import { IReqAccessToken } from '@/helpers/Token';
 
 export async function loginEo(req: Request, res: Response, next: NextFunction) {
     try {
@@ -48,6 +49,26 @@ export async function loginParticipants(req: Request, res: Response, next: NextF
             }
         })
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function UpdateUserAccount(req: Request, res: Response, next: NextFunction) {
+    try {
+        const reqToken = req as IReqAccessToken
+        const { uid } = reqToken.payload
+        const { email, username } = req.body
+
+        const UpdateProfile = await updateAccount({ uid, email, username })
+
+        res.status(201).send({
+            error: false,
+            message: "User updated!",
+            data: {
+                user: UpdateProfile
+            }
+        })
     } catch (error) {
         next(error)
     }

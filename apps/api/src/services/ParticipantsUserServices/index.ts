@@ -5,8 +5,7 @@ import { addMonths } from "date-fns";
 
 export const newParticipantsAccount = async ({ email, username, password, inputRef }: IUser) => {
     const referralCodes = await ReferralCodes({ username })
-    return await prisma.$transaction(async (prisma: any) => {
-        // // VALIDATOR
+    return await prisma.$transaction(async (prisma) => {
         const findDuplicateEmail = await prisma.user.findMany({
             where: {
                 email: email
@@ -21,7 +20,6 @@ export const newParticipantsAccount = async ({ email, username, password, inputR
         })
         if (findDuplicateUsername.length) throw new Error('Username Already Registered!')
 
-        // // CREATE NEW USER
         const createUser = await prisma.user.create({
             data: {
                 email: email,
@@ -38,8 +36,6 @@ export const newParticipantsAccount = async ({ email, username, password, inputR
         })
 
         if (inputRef) {
-
-            // CREATE NEW USER DISCOUNT
             await prisma.discountVoucher.create({
                 data: {
                     value: 0.1,
@@ -52,7 +48,6 @@ export const newParticipantsAccount = async ({ email, username, password, inputR
                 }
             })
 
-            //  FIND USER USED REFCODE UID
             const findUserUsedReferralCode = await prisma.user.findMany({
                 where: {
                     referralNum: {
@@ -61,8 +56,6 @@ export const newParticipantsAccount = async ({ email, username, password, inputR
                 }
             })
 
-
-            // CREATE USER USED REFCODE POINT
             if (findUserUsedReferralCode.length > 0) {
                 await prisma.points.create({
                     data: {
@@ -80,8 +73,4 @@ export const newParticipantsAccount = async ({ email, username, password, inputR
             }
         }
     })
-}
-
-export const findRoleServices = async () => {
-    return await prisma.role.findMany()
 }

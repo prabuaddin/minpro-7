@@ -21,7 +21,7 @@ export default function EoLoginPage() {
         }}
       >
         <Form>
-          <div className="flex flex-col justify-center items-center p-10">
+          <div className="flex flex-col justify-center items-center pt-28 h-screen">
             <div>
               <Link className="btn btn-ghost text-2xl text-blue-900" href="/">
                 <IoTicket size={30} /> GetTicket.Id
@@ -33,9 +33,11 @@ export default function EoLoginPage() {
               </span>
               <div className=" text-sm">
                 <span>Belum punya akun?</span>
-                <span className=" pl-1  font-semibold text-blue-900">
-                  Daftar
-                </span>
+                <Link href={'/event-organizer/register'}>
+                  <span className=" pl-1  font-semibold text-blue-900">
+                    Daftar
+                  </span>
+                </Link>
               </div>
             </div>
             <div className="flex flex-col justify-center items-center w-2/4">
